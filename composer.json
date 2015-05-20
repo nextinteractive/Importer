@@ -1,0 +1,25 @@
+{
+    "name": "backbee/importer",
+    "description": "Importer component for BackBee CMS",
+    "type": "library",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Nicolas Dufreche",
+            "email": "nicolas.dufreche@lp-digital.fr"
+        },
+        {
+            "name": "Eric Chau",
+            "email": "eric.chau@lp-digital.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "backbee/backbee": "1.0.*@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "BackBee\\Importer\\": ""
+        }
+    }
+}
