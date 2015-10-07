@@ -24,7 +24,7 @@
 namespace BackBee\Importer;
 
 use BackBee\ClassContent\AbstractClassContent;
-use BackBee\Utils\String;
+use BackBee\Utils\StringUtils as String;
 
 /**
  * @category    BackBee
