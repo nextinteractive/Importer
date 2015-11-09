@@ -85,7 +85,9 @@ class Importer
         $limit = true === isset($config['limit']) ? $config['limit'] : null;
         if (0 === $items_count) {
             Buffer::dump(
-                '=== Importation of '.$items_count.' can\'t be done, there is no item to convert.'."\n"
+                '=== Importation of '.$items_count.' can\'t be done, there is no item to convert.'."\n",
+                null,
+                $this->_application->isDebugMode()
             );
 
             return;
@@ -93,7 +95,9 @@ class Importer
 
         Buffer::dump(
             "\n".'===== Importation of '.(null !== $limit ? $limit." (total: $items_count)" : $items_count)
-            .' '.$class.' was started.'."\n\n"
+            .' '.$class.' was started.'."\n\n",
+            null,
+            $this->_application->isDebugMode()
         );
 
         $this->_doImport($rows, $flush_every, $check_existing, $limit);
@@ -105,11 +109,16 @@ class Importer
 
         Buffer::dump(
             "\n".$this->_importedItemsCount.' '.$class.' imported in '
-            .(microtime(true) - $starttime).' s ====='."\n\n"
+            .(microtime(true) - $starttime).' s ====='."\n\n",
+            null,
+            $this->_application->isDebugMode()
         );
 
         Buffer::dump(
-            "\n".$this->_failedItemsCount.' '.$class.' failed items ====='."\n\n", 'bold_red');
+            "\n".$this->_failedItemsCount.' '.$class.' failed items ====='."\n\n",
+            'bold_red',
+            $this->_application->isDebugMode()
+        );
     }
 
     /**
@@ -137,7 +146,7 @@ class Importer
             } catch (\Exception $e) {
                 $row = null;
                 Buffer::dump(
-                    "===== Exception while processing row: ".$e->getMessage()."\n", 'bold_red');
+                    "===== Exception while processing row: ".$e->getMessage()."\n", 'bold_red', $this->_application->isDebugMode());
                 $this->_failedItemsCount++;
                 continue;
             }
@@ -160,7 +169,9 @@ class Importer
                     Buffer::dump(
                         'Cleaning memory on null (every '.self::FLUSH_MEMORY_ON_NULL_EVERY
                         .' - total: '.$total_ignored.') : [BEFORE] '
-                        .self::convertMemorySize(memory_get_usage())
+                        .self::convertMemorySize(memory_get_usage()),
+                        null,
+                        $this->_application->isDebugMode()
                     );
 
                     if (0 < count($entities)) {
@@ -172,7 +183,11 @@ class Importer
                         $this->flushMemory();
                     }
 
-                    Buffer::dump('; [AFTER] '.self::convertMemorySize(memory_get_usage())."\n");
+                    Buffer::dump('; [AFTER] '.self::convertMemorySize(memory_get_usage())."\n",
+                        null,
+                        $this->_application->isDebugMode()
+                    );
+
                     $count_null = 0;
                 }
             }
@@ -270,7 +285,7 @@ class Importer
         $id_label = 'get'.ucfirst(array_key_exists('id_label', $this->_import_config) ? $this->_import_config['id_label'] : 'uid');
 
         $starttime = microtime(true);
-        Buffer::dump('Saving '.count($entities).' items...');
+        Buffer::dump('Saving '.count($entities).' items...', null, $this->_application->isDebugMode());
 
         foreach ($entities as $entity) {
             if (null !== $entity && false === $this->_application->getEntityManager()->contains($entity)) {
@@ -288,7 +303,10 @@ class Importer
         $this->flushMemory();
 
         Buffer::dump(' in '.(microtime(true) - $starttime).' s (total: '
-            .$this->_importedItemsCount.' - memory status: '.self::convertMemorySize(memory_get_usage()).")\n");
+            .$this->_importedItemsCount.' - memory status: '.self::convertMemorySize(memory_get_usage()).")\n",
+            null,
+            $this->_application->isDebugMode()
+        );
     }
 
     public static function convertMemorySize($size)
