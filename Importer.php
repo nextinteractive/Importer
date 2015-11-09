@@ -275,12 +275,15 @@ class Importer
         foreach ($entities as $entity) {
             if (null !== $entity && false === $this->_application->getEntityManager()->contains($entity)) {
                 $this->_application->getEntityManager()->persist($entity);
+                unset($entity);
             }
 
             $this->_importedItemsCount++;
         }
 
         $this->_application->getEntityManager()->flush();
+        $this->_application->getEntityManager()->clear();
+        gc_collect_cycles();
         $this->getConverter()->afterEntitiesFlush($this, $entities);
         $this->flushMemory();
 
