@@ -15,8 +15,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "backbee/backbee": "1.1.*@dev"
+        "backbee/backbee": "~1.1.0"
     },
+    "minimum-stability": "beta",
     "autoload": {
         "psr-4": {
             "BackBee\\Importer\\": ""
