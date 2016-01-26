@@ -97,9 +97,9 @@ class DataBase implements ImporterConnectorInterface
 
         if (isset($this->_config['charset'])) {
             try {
-                $em->getConnection()->executeQuery('SET SESSION character_set_client = "'.addslashes($this->_config['charset']).'";');
-                $em->getConnection()->executeQuery('SET SESSION character_set_connection = "'.addslashes($this->_config['charset']).'";');
-                $em->getConnection()->executeQuery('SET SESSION character_set_results = "'.addslashes($this->_config['charset']).'";');
+                $em->getConnection()->executeUpdate('SET SESSION character_set_client = "'.addslashes($this->_config['charset']).'";');
+                $em->getConnection()->executeUpdate('SET SESSION character_set_connection = "'.addslashes($this->_config['charset']).'";');
+                $em->getConnection()->executeUpdate('SET SESSION character_set_results = "'.addslashes($this->_config['charset']).'";');
             } catch (\Exception $e) {
                 throw new BBException(sprintf('Invalid database character set `%s`', $this->_config['charset']), BBException::INVALID_ARGUMENT, $e);
             }
@@ -107,7 +107,7 @@ class DataBase implements ImporterConnectorInterface
 
         if (isset($this->_config['collation'])) {
             try {
-                $em->getConnection()->executeQuery('SET SESSION collation_connection = "'.addslashes($this->_config['collation']).'";');
+                $em->getConnection()->executeUpdate('SET SESSION collation_connection = "'.addslashes($this->_config['collation']).'";');
             } catch (\Exception $e) {
                 throw new BBException(sprintf('Invalid database collation `%s`', $this->_config['collation']), BBException::INVALID_ARGUMENT, $e);
             }
