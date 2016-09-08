@@ -237,8 +237,8 @@ class Importer
     {
         $sql = 'SELECT :id_label FROM :table_name WHERE :where_clause';
         $statement = $this->_application->getEntityManager()->getConnection()->executeQuery($sql, array('id_label' => $id_label,
-            'table_name' => $table_name,
-            'where_clause' => $where_clause,
+                'table_name' => $table_name,
+                'where_clause' => $where_clause,
             )
         );
 
@@ -282,6 +282,11 @@ class Importer
      */
     public function save(array $entities, $check_existing = true)
     {
+        //KILL LE CRON TOUT LES 3 ARTICLE
+        if ($this->_importedItemsCount === 3) {
+            die;
+        }
+
         $id_label = 'get'.ucfirst(array_key_exists('id_label', $this->_import_config) ? $this->_import_config['id_label'] : 'uid');
 
         $starttime = microtime(true);
@@ -298,7 +303,7 @@ class Importer
 
         $this->_application->getEntityManager()->flush();
         $this->_application->getEntityManager()->clear();
-        gc_collect_cycles();
+        //gc_collect_cycles();
         $this->getConverter()->afterEntitiesFlush($this, $entities);
         $this->flushMemory();
 
@@ -319,7 +324,7 @@ class Importer
     public function flushMemory()
     {
         $this->_application->getEntityManager()->clear();
-        gc_collect_cycles();
+        //gc_collect_cycles();
 
         $this->getConverter()->beforeImport($this, $this->_import_config);
     }
